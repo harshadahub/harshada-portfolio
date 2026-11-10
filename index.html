@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harshada Siddhe — Portfolio</title>
+<meta name="description" content="Harshada Siddhe — BCA student, front-end developer in progress.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* ===== Tokens ===== */
+  :root{
+    --bg:        #F3EEFA;   /* pale lavender mist — page base */
+    --panel:     #FFFFFF;   /* card / sidebar surface */
+    --ink:       #2C2140;   /* deep plum-indigo — main text */
+    --ink-dim:   #74688B;   /* secondary text */
+    --line:      #E2D8F3;   /* hairline borders */
+    --accent:    #FF7A59;   /* sunset coral — primary accent */
+    --accent2:   #7C6FE0;   /* periwinkle — secondary accent, sparing */
+    --radius-card: 4px;
+    --maxw: 920px;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+  }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', system-ui, sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  a{ color:inherit; }
+  h1,h2,h3{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:600;
+    line-height:1.1;
+    margin:0;
+    color:var(--ink);
+  }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  ::selection{ background:var(--accent); color:#fff; }
+
+  :focus-visible{
+    outline: 2px solid var(--accent2);
+    outline-offset: 3px;
+  }
+
+  /* ===== Drifting background blobs ===== */
+  .bg-drift{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    overflow:hidden;
+    pointer-events:none;
+  }
+  .bg-drift span{
+    position:absolute;
+    border-radius:50%;
+    filter: blur(70px);
+    opacity:0.45;
+  }
+  .bg-drift .b1{
+    width:420px; height:420px;
+    top:-120px; left:-100px;
+    background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+    animation: drift1 26s ease-in-out infinite;
+  }
+  .bg-drift .b2{
+    width:360px; height:360px;
+    top:30%; right:-140px;
+    background: radial-gradient(circle, var(--accent2) 0%, transparent 70%);
+    animation: drift2 32s ease-in-out infinite;
+  }
+  .bg-drift .b3{
+    width:300px; height:300px;
+    bottom:-100px; left:20%;
+    background: radial-gradient(circle, #FFD3A5 0%, transparent 70%);
+    animation: drift3 22s ease-in-out infinite;
+  }
+  .bg-drift .b4{
+    width:260px; height:260px;
+    bottom:10%; right:8%;
+    background: radial-gradient(circle, var(--accent2) 0%, transparent 70%);
+    animation: drift1 30s ease-in-out infinite reverse;
+    opacity:0.3;
+  }
+  @keyframes drift1{
+    0%,100%{ transform: translate(0,0) rotate(0deg) scale(1); }
+    50%{ transform: translate(60px,40px) rotate(20deg) scale(1.08); }
+  }
+  @keyframes drift2{
+    0%,100%{ transform: translate(0,0) rotate(0deg) scale(1); }
+    50%{ transform: translate(-50px,60px) rotate(-15deg) scale(0.95); }
+  }
+  @keyframes drift3{
+    0%,100%{ transform: translate(0,0) rotate(0deg) scale(1); }
+    50%{ transform: translate(40px,-50px) rotate(12deg) scale(1.1); }
+  }
+
+  /* ===== Layout shell ===== */
+  .shell{
+    display:grid;
+    grid-template-columns: 260px 1fr;
+    min-height:100vh;
+  }
+  @media (max-width: 860px){
+    .shell{ grid-template-columns: 1fr; }
+  }
+
+  /* ===== Sidebar ===== */
+  .sidebar{
+    position:sticky;
+    top:0;
+    height:100vh;
+    padding: 2.5rem 2rem;
+    border-right:1px solid var(--line);
+    background:var(--panel);
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  @media (max-width: 860px){
+    .sidebar{
+      position:relative;
+      height:auto;
+      border-right:none;
+      border-bottom:1px solid var(--line);
+      padding: 1.75rem 1.5rem;
+    }
+  }
+
+  .sidebar-top .name{
+    font-size:1.3rem;
+    letter-spacing:-0.01em;
+  }
+  .sidebar-top .role{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--accent);
+    margin-top:0.4rem;
+    letter-spacing:0.02em;
+  }
+
+  .nav{
+    list-style:none;
+    padding:0;
+    margin: 2.5rem 0 0;
+    display:flex;
+    flex-direction:column;
+    gap:0.85rem;
+  }
+  @media (max-width: 860px){
+    .nav{
+      flex-direction:row;
+      flex-wrap:wrap;
+      margin-top:1.25rem;
+      gap:1.1rem;
+    }
+  }
+  .nav a{
+    text-decoration:none;
+    color:var(--ink-dim);
+    font-size:0.95rem;
+    transition:color 0.2s ease;
+  }
+  .nav a:hover, .nav a:focus-visible{ color:var(--ink); }
+  .nav a.active{ color:var(--accent); }
+
+  .sidebar-bottom{
+    display:flex;
+    flex-direction:column;
+    gap:0.6rem;
+    margin-top:2rem;
+  }
+  @media (max-width: 860px){ .sidebar-bottom{ display:none; } }
+  .sidebar-bottom a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--ink-dim);
+    text-decoration:none;
+    border-bottom:1px solid transparent;
+  }
+  .sidebar-bottom a:hover{ color:var(--accent); border-bottom-color:var(--accent); }
+
+  /* ===== Main content ===== */
+  main{ padding: 0 2rem; }
+  section{
+    max-width:var(--maxw);
+    margin: 0 auto;
+    padding: 5.5rem 0;
+    border-bottom:1px solid var(--line);
+  }
+  section:last-of-type{ border-bottom:none; }
+  @media (max-width: 600px){
+    main{ padding:0 1.25rem; }
+    section{ padding: 3.5rem 0; }
+  }
+
+  .eyebrow-node{
+    display:flex;
+    align-items:center;
+    gap:0.6rem;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--accent);
+    margin-bottom:1rem;
+  }
+  .eyebrow-node .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--accent);
+    flex-shrink:0;
+  }
+
+  /* ===== Hero ===== */
+  .hero{
+    padding-top: 4.5rem;
+    min-height: 88vh;
+    display:grid;
+    grid-template-columns: 1.3fr 0.9fr;
+    align-items:center;
+    gap:2rem;
+    border-bottom:1px solid var(--line);
+  }
+  @media (max-width: 760px){
+    .hero{ grid-template-columns:1fr; padding-top:3rem; min-height:auto; }
+    .hero-photo{ order:-1; margin-bottom:1rem; }
+  }
+  .hero h1{
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    max-width:14ch;
+  }
+  .hero .lede{
+    margin-top:1.6rem;
+    max-width:50ch;
+    color:var(--ink-dim);
+    font-size:1.08rem;
+  }
+  .hero .lede strong{ color:var(--ink); font-weight:600; }
+
+  /* Floating photo */
+  .hero-photo{
+    position:relative;
+    justify-self:center;
+    width:min(260px, 70%);
+  }
+  .hero-photo .photo-frame{
+    position:relative;
+    width:100%;
+    aspect-ratio: 1 / 1;
+    animation: bob 4.5s ease-in-out infinite;
+  }
+  .hero-photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:50%;
+    display:block;
+    border: 4px solid var(--panel);
+    box-shadow: 0 20px 45px -12px rgba(44,33,64,0.35);
+  }
+  .hero-photo .photo-shadow{
+    position:absolute;
+    left:50%;
+    bottom:-18px;
+    width:62%;
+    height:22px;
+    transform:translateX(-50%);
+    background: radial-gradient(ellipse, rgba(44,33,64,0.28), transparent 72%);
+    animation: shadow-pulse 4.5s ease-in-out infinite;
+  }
+  @keyframes bob{
+    0%,100%{ transform: translateY(0) rotate(-1deg); }
+    50%{ transform: translateY(-16px) rotate(1deg); }
+  }
+  @keyframes shadow-pulse{
+    0%,100%{ transform: translateX(-50%) scale(1); opacity:0.32; }
+    50%{ transform: translateX(-50%) scale(0.8); opacity:0.18; }
+  }
+
+  /* ===== About ===== */
+  .about-grid{
+    display:grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap:3rem;
+  }
+  @media (max-width:700px){ .about-grid{ grid-template-columns:1fr; gap:2rem; } }
+  .about-grid h2{ font-size:1.9rem; margin-bottom:1.3rem; }
+  .about-grid p{ color:var(--ink-dim); }
+  .about-grid p + p{ margin-top:1rem; }
+
+  .facts{
+    border-left:1px solid var(--line);
+    padding-left:1.5rem;
+    display:flex;
+    flex-direction:column;
+    gap:1.1rem;
+  }
+  .facts dt{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    color:var(--accent);
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+  }
+  .facts dd{ margin:0.25rem 0 0; color:var(--ink); font-size:0.95rem; }
+
+  /* ===== Skills ===== */
+  .skills-groups{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem 2.5rem;
+    margin-top:2rem;
+  }
+  .skill-group h3{
+    font-size:1rem;
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--ink-dim);
+    font-weight:500;
+    margin-bottom:0.9rem;
+  }
+  .skill-list{
+    list-style:none;
+    padding:0; margin:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.55rem;
+  }
+  .skill-list li{
+    font-size:0.85rem;
+    padding:0.4rem 0.75rem;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius-card);
+    color:var(--ink);
+  }
+
+  /* ===== Projects ===== */
+  .project-list{
+    margin-top:2rem;
+    display:flex;
+    flex-direction:column;
+  }
+  .project{
+    display:grid;
+    grid-template-columns: 1fr 2fr;
+    gap:2rem;
+    padding: 2.1rem 0;
+    border-top:1px solid var(--line);
+    text-decoration:none;
+    color:inherit;
+  }
+  .project:first-child{ border-top:none; }
+  @media (max-width:700px){
+    .project{ grid-template-columns:1fr; gap:0.8rem; }
+  }
+  .project-name{
+    font-family:'Fraunces', serif;
+    font-size:1.4rem;
+    font-weight:600;
+  }
+  .project-tag{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    color:var(--accent);
+    margin-top:0.5rem;
+  }
+  .project-desc{ color:var(--ink-dim); font-size:0.98rem; }
+  .project-stack{
+    margin-top:0.9rem;
+    display:flex;
+    gap:0.5rem;
+    flex-wrap:wrap;
+  }
+  .project-stack span{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    color:var(--ink-dim);
+    border:1px solid var(--line);
+    padding:0.2rem 0.55rem;
+    border-radius:var(--radius-card);
+  }
+  .project-link{
+    margin-top:0.9rem;
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.8rem;
+    color:var(--ink);
+    border-bottom:1px solid var(--line);
+  }
+  .project:hover .project-link{ color:var(--accent); border-color:var(--accent); }
+
+  /* ===== Education timeline ===== */
+  .timeline{
+    margin-top:2rem;
+    display:flex;
+    flex-direction:column;
+  }
+  .tl-item{
+    display:grid;
+    grid-template-columns: 90px 1fr;
+    gap:1.5rem;
+    padding:1.4rem 0;
+    border-top:1px solid var(--line);
+  }
+  .tl-item:first-child{ border-top:none; }
+  @media (max-width:600px){ .tl-item{ grid-template-columns:1fr; gap:0.3rem; } }
+  .tl-year{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--accent);
+    font-size:0.85rem;
+  }
+  .tl-body strong{ display:block; font-size:1.02rem; margin-bottom:0.2rem; }
+  .tl-body span{ color:var(--ink-dim); font-size:0.9rem; }
+
+  /* ===== Contact ===== */
+  .contact h2{ font-size:2.1rem; max-width:16ch; }
+  .contact p{ color:var(--ink-dim); margin-top:1.1rem; max-width:48ch; }
+  .contact-links{
+    margin-top:2.2rem;
+    display:flex;
+    flex-direction:column;
+    gap:0.9rem;
+  }
+  .contact-links a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:1rem;
+    text-decoration:none;
+    width:fit-content;
+    color:var(--ink);
+    border-bottom:1px solid var(--line);
+    padding-bottom:0.15rem;
+    transition:border-color 0.2s ease, color 0.2s ease;
+  }
+  .contact-links a:hover{ color:var(--accent); border-color:var(--accent); }
+
+  footer{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding: 2rem 2rem 3rem;
+    color:var(--ink-dim);
+    font-size:0.8rem;
+    font-family:'IBM Plex Mono', monospace;
+  }
+</style>
+</head>
+<body>
+
+<!-- soft drifting shapes behind everything -->
+<div class="bg-drift" aria-hidden="true">
+  <span class="b1"></span>
+  <span class="b2"></span>
+  <span class="b3"></span>
+  <span class="b4"></span>
+</div>
+
+<div class="shell">
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <div class="name">Harshada Siddhe</div>
+      <div class="role">BCA student — building for the web</div>
+
+      <ul class="nav" id="nav">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-bottom">
+      <!-- TODO: replace with your real links -->
+      <a href="mailto:your.email@example.com">your.email@example.com</a>
+      <a href="https://github.com/harshadahub" target="_blank" rel="noopener">github.com/harshadahub</a>
+      <a href="https://linkedin.com/in/harshada siddhe" target="_blank" rel="noopener">linkedin.com/in/harshada siddhe</a>
+      <!-- TODO: link your resume PDF once ready -->
+      <a href="#">Download résumé</a>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div>
+        <h1>I build interfaces the same way I learn data structures — one node at a time.</h1>
+        <p class="lede">
+          I'm <strong>Harshada</strong>, a final-year BCA student at K.K. Wagh College, Nashik, under Savitribai Phule Pune University.
+          I work mainly in HTML, CSS and JavaScript, and I'm currently going deeper into the MERN stack, alongside coursework in
+          data structures, DBMS and networking.
+        </p>
+      </div>
+
+      <!-- Floating photo. Replace the src below with your own photo file -->
+      <div class="hero-photo">
+        <div class="photo-frame">
+          <!-- TODO: put your photo file next to this HTML file and change src to its filename, e.g. src="photo.jpg" -->
+        <img src="professionalphoto.jpg">
+        </div>
+        <div class="photo-shadow" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="eyebrow-node"><span class="dot"></span>about</div>
+      <div class="about-grid">
+        <div>
+          <h2>A bit about me</h2>
+          <p>
+            I'm in my final year of BCA, and most of what I know about the web I've learned by actually shipping small
+            projects rather than only reading theory. That started with plain HTML and CSS — layouts, grids, flexbox,
+            getting spacing to behave — and has since grown into picking apart JavaScript and, more recently, the MERN stack.
+          </p>
+          <p>
+            Alongside that, my coursework has pushed me through data structures, database management and networking, which
+            shapes how I think about a project before I touch a single tag — what the data looks like, how it should be
+            structured, and only then how it should look.
+          </p>
+        </div>
+        <dl class="facts">
+          <div>
+            <dt>Based in</dt>
+            <dd>Nashik, Maharashtra</dd>
+          </div>
+          <div>
+            <dt>Studying</dt>
+            <dd>BCA, Final Year — K.K. Wagh College, Nashik (SPPU)</dd>
+          </div>
+          <div>
+            <dt>Currently learning</dt>
+            <dd>MERN stack</dd>
+          </div>
+          <div>
+            <dt>Looking for</dt>
+            <dd>Front-end / web development internship</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+      <div class="eyebrow-node"><span class="dot"></span>skills</div>
+      <h2>What I work with</h2>
+      <div class="skills-groups">
+        <div class="skill-group">
+          <h3>Front-end</h3>
+          <ul class="skill-list">
+            <li>HTML5</li><li>CSS3</li><li>Flexbox</li><li>Grid</li><li>JavaScript</li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <h3>Learning now</h3>
+          <ul class="skill-list">
+            <li>React</li><li>Node.js</li><li>Express</li><li>MongoDB</li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <h3>Coursework</h3>
+          <ul class="skill-list">
+            <li>Data Structures</li><li>DBMS / SQL</li><li>Python</li><li>Networking</li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <h3>Tools</h3>
+          <ul class="skill-list">
+            <li>Git</li><li>VS Code</li><li>Netlify</li>
+            <!-- TODO: add/remove tools you actually use -->
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <div class="eyebrow-node"><span class="dot"></span>projects</div>
+      <h2>Things I've built</h2>
+
+      <div class="project-list">
+        <!-- TODO: replace # with live links once hosted, and swap in real screenshots if you add images -->
+        <a class="project" href="#" target="_blank" rel="noopener">
+          <div>
+            <div class="project-name">Basilico</div>
+            <span class="project-tag">restaurant website</span>
+          </div>
+          <div>
+            <p class="project-desc">
+              A restaurant website built to practice real layout problems — CSS grid for the menu sections,
+              flexbox for navigation, and responsive image sizing across breakpoints.
+            </p>
+            <div class="project-stack"><span>HTML</span><span>CSS</span><span>Responsive design</span></div>
+            <span class="project-link">View project →</span>
+          </div>
+        </a>
+
+        <a class="project" href="#" target="_blank" rel="noopener">
+          <div>
+            <div class="project-name">HARSHU</div>
+            <span class="project-tag">book-selling site · class assignment</span>
+          </div>
+          <div>
+            <p class="project-desc">
+              A multi-page site for selling books, built for a class assignment and deployed live on Netlify.
+              Covers multi-page navigation, consistent styling across pages, and basic deployment.
+            </p>
+            <div class="project-stack"><span>HTML</span><span>CSS</span><span>Netlify</span></div>
+            <span class="project-link">View project →</span>
+          </div>
+        </a>
+
+        <a class="project" href="#" target="_blank" rel="noopener">
+          <div>
+            <div class="project-name">This portfolio</div>
+            <span class="project-tag">personal site</span>
+          </div>
+          <div>
+            <p class="project-desc">
+              The site you're on right now — built to bring together everything I've learned so far about layout,
+              typography and small JavaScript interactions in one place.
+            </p>
+            <div class="project-stack"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- EDUCATION -->
+    <section id="education">
+      <div class="eyebrow-node"><span class="dot"></span>education</div>
+      <h2>Education</h2>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-year">Final Yr</div>
+          <div class="tl-body">
+            <strong>BCA — K.K. Wagh College, Nashik</strong>
+            <span>Savitribai Phule Pune University (SPPU), NEP 2024 pattern</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <!-- TODO: fill in your 12th / junior college details -->
+          <div class="tl-year">Earlier</div>
+          <div class="tl-body">
+            <strong>Higher Secondary (12th)</strong>
+            <span>Add your junior college name and stream here</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+      <div class="eyebrow-node"><span class="dot"></span>contact</div>
+      <h2>Let's work together</h2>
+      <p>
+        I'm looking for a front-end or web development internship where I can keep building on real projects.
+        If you've got one, I'd love to hear from you.
+      </p>
+      <div class="contact-links">
+        <!-- TODO: replace with your real details -->
+        <a href="mailto:harshadasiddhe@gmail.com">harshadasiddhe@gmail.com</a>
+        <a href="https://github.com/harshadahub" target="_blank" rel="noopener">harshadahub</a>
+        <a href="https://linkedin.com/in/harshada siddhe" target="_blank" rel="noopener">harshada siddhe</a>
+      </div>
+    </section>
+
+    <footer>
+      &copy; <span id="year"></span> Harshada Siddhe. Built with HTML, CSS &amp; JS.
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  // Footer year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Highlight active nav link based on scroll position
+  const sections = document.querySelectorAll('main section[id]');
+  const navLinks = document.querySelectorAll('#nav a');
+
+  const setActive = () => {
+    let currentId = '';
+    const scrollPos = window.scrollY + window.innerHeight * 0.3;
+
+    sections.forEach(sec => {
+      if (scrollPos >= sec.offsetTop) currentId = sec.id;
+    });
+
+    navLinks.forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + currentId);
+    });
+  };
+
+  window.addEventListener('scroll', setActive, { passive: true });
+  window.addEventListener('load', setActive);
+</script>
+
+</body>
+</html>
